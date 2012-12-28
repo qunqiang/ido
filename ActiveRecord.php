@@ -79,7 +79,7 @@ class ActiveRecord
 	 	ActiveRecord::find_by_id(1), 
 		ActiveRecord::find_by_name_and_sex('ln',Female);
 		the two function calls will be both mapped to 
-		ActiveRecord::find_by(array('id' => 1))
+		ActiveRecord::find_by(array('id' => 1)),
 		ActiveRecord::find_by(array('name' => 'ln', 'sex' => Female))
 	 */
 	public function __call($funcName, $args)
