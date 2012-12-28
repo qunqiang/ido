@@ -7,9 +7,10 @@ Most of the methods in the adapter are useful during migrations. Most notably, S
 abstract class AbstractAdapter
 {
 
-	static $active;
+    static $active;
     static $connection;
-    
+	static $lastVerification;
+	    
     /**
      * compaction for user defined exception handler
      */
@@ -23,41 +24,45 @@ abstract class AbstractAdapter
      */
     public static function init()
     {
+		if (function_exists('get_called_class'))
+		{
+			$class = get_called_class();
+		}
+		else
+		{
+			$bt = debug_backtrace();
+			$bt = $bt[0];
+			$lines = file($bt['file']);
+			$line = $lines[$bt['line'] - 1];
+			$calledClass = preg_match('/\s(\w+)::/', $line, $class);
+			if($calledClass >= 2)
+			{
+				$class = $class[1];
+			}
+			
+		}		
         if (!self::$connection)
         {
-            self::$connection = self::connect();
+            self::$connection = new $class;
         }
         return self::$connection;
-    }
-    
-    /**
-     * Provides access to the underlying database connection. Useful for when you need to call a proprietary method such as postgresql’s lo_* methods
-     */
-    public function getRawConnection()
-    {
-        if ($connection = self::init())
-        {
-            return $connection;
-        }
-        self::raise('ResourceNotFound');
-        return NULL;
     }
 
 	/**
 	 * Is this connection active and ready to perform queries?
 	 */
-	public static function activeStatus()
-	{
-		return self::$active !== false;
-	}
+    public static function activeStatus()
+    {
+    	return self::$active !== false;
+    }
 	
     /**
      * Returns the human-readable name of the adapter.
      */
-	public function adapterName()
-	{
-		return 'Abstract';
-	}
+    public function adapterName()
+    {
+    	return 'Abstract';
+    }
     
     /**
      * Close this connection
@@ -79,10 +84,7 @@ abstract class AbstractAdapter
     /**
      * Close this connection and open a new one in its place.   
      */
-    public function reconnect()
-    {
-        self::$active = true;
-    }
+    abstract function connect();
     
     /**
      * Does this adapter support using DISTINCT within COUNT? This is true for all adapters except sqlite.
@@ -100,11 +102,19 @@ abstract class AbstractAdapter
         $now = time();
         if($now - self::$lastVerification > $timeout)
         {
-            if (!self::active())
+            if (!$this->activeStatus())
             {
-                self::reconnect();
+                $this->connect();
             }
             self::$lastVerification = $now;
         }
     }
+	
+	/**
+	 * returns database version
+	 */
+	public function version()
+	{
+		return '0.1';
+	}
 }
