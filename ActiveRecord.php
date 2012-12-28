@@ -4,10 +4,7 @@
 // ================================================================================================
 class ActiveRecord
 {
-	/**
-	 * @var Connection<ido/connection.php> stored established connection
-	 */
-	private $connection;
+	
 	/**
 	 * @var Singleton<called class>
 	 */
@@ -22,7 +19,6 @@ class ActiveRecord
 	 */
 	private function ActiveRecord()
 	{
-		$this->connection = Connection::connect();
 		$this->table 	  = Table::initWithTableName($this->tableName());
 	}
 	
@@ -114,9 +110,10 @@ class ActiveRecord
 	 */
 	public function find_by($conditions)
 	{
-		echo $this->connection->getAdapter()->adapterName();
-		var_dump($this->connection->getAdapter()->verify(120));
-		// $this->connection->createSqlBuilder()->findAll($conditions);
+		echo $this->table->connection->getAdapter()->adapterName();
+		var_dump($this->table->connection->getAdapter()->verify(120));
+		// $this->table->connection->query($this->table->getBuilder()->build($conditions));
+		echo $this->table->humanName();
 	}
 	
 	/**
