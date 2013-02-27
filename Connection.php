@@ -43,4 +43,36 @@ class Connection
 	{
 		return ucfirst($this->adapterName);
 	}
+
+	public function initQueryWithConditions($complexConditions)
+	{
+
+		return $this;
+	}
+
+	public function initQueryWithSQL($sql)
+	{
+		var_dump($sql);
+		return $this;
+	}
+
+	public function exec()
+	{
+		return null;
+	}
+
+	public function getOne()
+	{
+		return array();
+	}
+
+	public function getCol()
+	{
+		return null;
+	}
+
+	public function getAll()
+	{
+		return array();
+	}
 }

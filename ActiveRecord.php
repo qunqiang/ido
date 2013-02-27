@@ -110,10 +110,16 @@ class ActiveRecord
 	 */
 	public function find_by($conditions)
 	{
-		echo $this->table->connection->getAdapter()->adapterName();
-		var_dump($this->table->connection->getAdapter()->verify(120));
+
+		//echo $this->table->connection->getAdapter()->adapterName();
+		//var_dump($this->table->connection->getAdapter()->verify(120));	
 		// $this->table->connection->query($this->table->getBuilder()->build($conditions));
-		echo $this->table->humanName();
+		// echo $this->table->humanName();
+
+		var_dump($this->table->connection->initQueryWithConditions($conditions)->exec());
+		var_dump($this->table->connection->initQueryWithSQL(SQLSyntax::get('sql.front.news_list'))->getAll());
+		// var_dump($conditions);
+
 	}
 	
 	/**

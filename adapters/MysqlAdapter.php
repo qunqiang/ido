@@ -26,6 +26,7 @@ class MysqlAdapter extends AbstractAdapter
 		mysql_select_db($dbconfig['database']);
 		mysql_query('SET NAMES ' . $dbconfig['charset']);
 	}
-	
+
+		
 	
 }

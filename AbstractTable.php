@@ -10,13 +10,10 @@ abstract class AbstractTable
 	
 	public function AbstractTable()
 	{
-		$this->connection = Connection::connect();
+		
 	}
 	
 	
-	public function humanName()
-	{
-		return ucfirst(trim($this->tableName, '{}'));
-	}
+	
 
 }

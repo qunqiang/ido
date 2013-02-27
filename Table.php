@@ -1,10 +1,15 @@
 <?php
-class Table extends AbstractTable
+class Table 
 {
 	static $table;
 	
 	public $tableName;
 	
+	private function Table()
+	{
+		$this->connection = Connection::connect();
+	}
+
 	/**
 	 * returns singleton of Table
 	 */
@@ -13,6 +18,7 @@ class Table extends AbstractTable
 		if (!self::$table)
 		{
 			self::$table = new Table;
+
 		}
 		return self::$table;
 	}
@@ -40,6 +46,11 @@ class Table extends AbstractTable
 		{
 			return $this->tableName;
 		}
+	}
+
+	public function humanName()
+	{
+		return ucfirst(trim($this->tableName, '{}'));
 	}
 	
 	/**
